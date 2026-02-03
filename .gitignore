@@ -27,12 +27,6 @@ node_modules/
 
 # Local data & artifacts
 data.db
-raw/
-data/raw/
-data/*.json
-!data/country_names.json
-data/ratetradeagreements_index.json
-data/landgroups_map.json
 
 # Docker
 *.tar

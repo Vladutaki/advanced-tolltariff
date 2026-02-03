@@ -25,7 +25,7 @@ if [[ "$BOOTSTRAP" == "true" ]]; then
     echo "[bootstrap] Downloading duty rates from $TOLL_DUTY_URL"
     curl -fsSL "$TOLL_DUTY_URL" -o /app/raw/tollavgiftssats.json || echo "[bootstrap] Warning: failed to download tollavgiftssats.json"
   fi
-  if [[ -f "/app/raw/tollavgiftssats.json" ]]; then
+  if [[ -f "/app/raw/tollavgiftssats.json" || -f "/app/data/raw/tollavgiftssats.json" ]]; then
     python -m tolltariff.cli import-duty-rates || true
   else
     echo "[bootstrap] Skipping import-duty-rates (raw/tollavgiftssats.json missing)."
