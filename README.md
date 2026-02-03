@@ -100,7 +100,9 @@ Acest repo include `render.yaml` pentru deploy rapid:
   - `TOLLTARIFF_BOOTSTRAP=true`
   - `DATABASE_URL=sqlite:///data.db` (sau link către Render Postgres)
   - `TOLLTARIFF_DUTY_URL=<URL direct către tollavgiftssats.json>` (opțional, recomandat)
-4) Asociază un Persistent Disk la serviciu (Render citește din `render.yaml`: disk `data` la `/app/data`).
+4) Pe planul Free, Render nu suportă disk-uri; două opțiuni:
+  - Folosește `DATABASE_URL` către Render Postgres pentru persistență
+  - Sau upgrade la un plan care permite disk și adaugă unul manual
 5) Deschide URL-ul public și vizitează `/ui`.
 
 ## Azure quickstart (Container Apps)

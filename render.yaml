@@ -16,7 +16,3 @@ services:
       # Optional: direct URL to duty rates JSON to import on startup
       - key: TOLLTARIFF_DUTY_URL
         value: ""
-    disk:
-      name: data
-      mountPath: /app/data
-      sizeGB: 1
