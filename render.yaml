@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: advanced-tolltariff
+    env: docker
+    autoDeploy: true
+    plan: starter
+    healthCheckPath: /health
+    envVars:
+      - key: PORT
+        value: 8000
+      - key: TOLLTARIFF_BOOTSTRAP
+        value: "true"
+      - key: DATABASE_URL
+        value: sqlite:///data.db
+      # Optional: direct URL to duty rates JSON to import on startup
+      - key: TOLLTARIFF_DUTY_URL
+        value: ""
+    disks:
+      - name: data
+        mountPath: /app/data
+        sizeGB: 1

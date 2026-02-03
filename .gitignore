@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.pytest_cache/
+.coverage
+
+# Environments
+.env
+.venv/
+env/
+venv/
+
+# Editor/IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node/Playwright (if present)
+node_modules/
+.playwright/
+
+# Local data & artifacts
+data.db
+raw/
+data/raw/
+data/*.json
+!data/country_names.json
+data/ratetradeagreements_index.json
+data/landgroups_map.json
+
+# Docker
+*.tar

@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Advanced Tolltariff UI</title>
+  <link rel="stylesheet" href="/ui/style.css" />
+</head>
+<body>
+  <header>
+    <h1>Advanced Tolltariff</h1>
+    <p>Find best origin (lowest customs duty) for an HTC.</p>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>Lookup Best Origin</h2>
+      <form id="bestForm">
+        <div class="grid">
+          <label>
+            HTC Code
+            <input type="text" id="htcCode" placeholder="e.g. 01012100" required />
+          </label>
+          <label>
+            Weight (kg)
+            <input type="number" id="weightKg" step="0.001" placeholder="optional" />
+          </label>
+          <label>
+            Quantity
+            <input type="number" id="quantity" step="1" placeholder="optional" />
+          </label>
+          <label>
+            Customs Value (NOK)
+            <input type="number" id="customsValue" step="0.01" placeholder="optional" />
+          </label>
+          <label>
+            Top N
+            <input type="number" id="topN" min="1" step="1" value="5" />
+          </label>
+          <label class="checkbox">
+            <input type="checkbox" id="flatten" /> Flatten countries
+          </label>
+        </div>
+        <button type="submit">Compute</button>
+      </form>
+      <div id="bestOutput" class="output"></div>
+    </section>
+
+    <section class="card">
+      <h2>HTC Agreements</h2>
+      <div class="grid">
+        <label>
+          HTC Code
+          <input type="text" id="agreementsCode" placeholder="e.g. 01012100" />
+        </label>
+        <button id="agreementsBtn">Load Agreements</button>
+        <button id="zeroBtn">Zero Duty</button>
+      </div>
+      <div id="agreementsOutput" class="output"></div>
+    </section>
+
+    <section class="card">
+      <h2>Search HTC</h2>
+      <div class="grid">
+        <label>
+          Query
+          <input type="text" id="searchQuery" placeholder="code or name" />
+        </label>
+        <button id="searchBtn">Search</button>
+      </div>
+      <div id="searchOutput" class="output"></div>
+    </section>
+  </main>
+
+  <footer>
+    <small>Powered by FastAPI</small>
+  </footer>
+
+  <script src="/ui/app.js"></script>
+</body>
+</html>
