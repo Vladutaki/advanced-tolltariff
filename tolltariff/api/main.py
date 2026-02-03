@@ -15,12 +15,15 @@ app = FastAPI(title="Advanced Tolltariff API")
 # Create tables on startup (dev only). In production, use migrations.
 Base.metadata.create_all(bind=engine)
 
-# Serve a simple UI
-try:
-    app.mount("/ui", StaticFiles(directory="frontend", html=True), name="ui")
-except Exception:
-    # If frontend folder missing, skip mounting (dev env only)
-    pass
+# Serve a simple UI (prefer per-user data dir, fallback to bundled frontend)
+frontend_candidates = [settings.data_dir / "frontend", Path("frontend")]  # second for dev
+for fe in frontend_candidates:
+    try:
+        if fe.exists():
+            app.mount("/ui", StaticFiles(directory=str(fe), html=True), name="ui")
+            break
+    except Exception:
+        continue
 
 @app.get("/")
 def root():
@@ -42,8 +45,9 @@ def debug_info(db: Session = Depends(get_db)):
         "database_url": settings.database_url,
         "htc_count": htc_count,
         "rate_count": rate_count,
-        "data_dir_exists": Path("data").exists(),
-        "frontend_dir_exists": Path("frontend").exists(),
+        "data_dir": str(settings.data_dir),
+        "data_dir_exists": settings.data_dir.exists(),
+        "frontend_dir_exists": (settings.data_dir / "frontend").exists() or Path("frontend").exists(),
     }
 
 @app.get("/htc", response_model=list[schemas.HTCSummary])

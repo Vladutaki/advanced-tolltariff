@@ -4,8 +4,9 @@ from pathlib import Path
 from typing import Optional
 
 import httpx
+from ..config import settings
 
-DATA_DIR = Path("data")
+DATA_DIR = settings.data_dir
 RAW_DIR = DATA_DIR / "raw"
 RAW_DIR.mkdir(parents=True, exist_ok=True)
 

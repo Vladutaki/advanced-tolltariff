@@ -57,6 +57,18 @@ python -m uvicorn tolltariff.api.main:app --reload --port 8001
 
 UI-ul static este disponibil la http://localhost:8001/ui/
 
+## Windows (fără admin, installer per-user)
+
+Varianta simplă (portable):
+- Rulează `packaging/windows/run.bat` – va porni API-ul pe `127.0.0.1:8000` și va scrie date în `%LOCALAPPDATA%/AdvancedTolltariff`.
+
+Varianta installer (Inno Setup):
+- Deschide `packaging/windows/advanced-tolltariff.iss` în Inno Setup și build.
+- Installerul copiază proiectul în `%LOCALAPPDATA%/AdvancedTolltariff`, creează shortcut și pornește aplicația.
+- Nu cere privilegii admin; folosește SQLite în directorul per-user.
+
+Notă: În Windows, implicit `DATABASE_URL` și folderele de date folosesc `%LOCALAPPDATA%/AdvancedTolltariff` (config automat). Poți suprascrie cu `TOLLTARIFF_DATA_DIR`.
+
 ## Docker
 
 Construiește și rulează un container care servește API + UI pe portul 8000. La primul start rulează bootstrap (descarcă + importă date) dacă `TOLLTARIFF_BOOTSTRAP=true`.
