@@ -274,6 +274,14 @@ def best_origin(
     # Sort by ascending cost
     ranked = sorted(best_per_group.values(), key=lambda x: x["cost_nok"])
 
+    # If nothing is computable, provide a helpful hint
+    if not ranked:
+        return {
+            "code": code,
+            "recommendations": [],
+            "hint": "No computable customs duty. Provide weight_kg, quantity, or customs_value_nok, or import duty rates (tollavgiftssats)."
+        }
+
     # Optionally cut to top N
     if top_n is not None and top_n > 0:
         ranked = ranked[:top_n]

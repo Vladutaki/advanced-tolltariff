@@ -47,7 +47,15 @@ function renderBestOrigin(output, data) {
     output.appendChild(item);
     return;
   }
-  (data.recommendations || []).forEach(rec => {
+  const recs = data.recommendations || [];
+  if (!recs.length) {
+    const item = document.createElement('div');
+    item.className = 'item';
+    item.textContent = data.hint || 'No results. Provide inputs or ensure duty rates are imported.';
+    output.appendChild(item);
+    return;
+  }
+  recs.forEach(rec => {
     const item = document.createElement('div');
     item.className = 'item';
     const h3 = document.createElement('h3');
