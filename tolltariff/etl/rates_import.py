@@ -34,6 +34,11 @@ def import_default_rates_from_fees(db: Session, path: Path, source_url: str | No
     """
     data = json.loads(path.read_text(encoding="utf-8"))
     varer = data.get("varer", [])
+    total_varer = len(varer)
+    progress_step = max(1, (total_varer // 20) if total_varer else 1)
+    total_varer = len(varer)
+    # Aim for ~20 progress updates across the dataset
+    progress_step = max(1, total_varer // 20) or 1
 
     added = 0
     ordinary_groups = {"TAL", "TALL", "ALLE"}
@@ -184,7 +189,7 @@ def import_customs_duty_from_toll(db: Session, path: Path, source_url: str | Non
     added = 0
     ordinary_groups = {"TAL", "TALL", "ALLE"}
 
-    for v in varer:
+    for idx, v in enumerate(varer, 1):
         code = str(v.get("id") or "").strip()
         if not code:
             continue
@@ -287,6 +292,16 @@ def import_customs_duty_from_toll(db: Session, path: Path, source_url: str | Non
                     )
                 )
                 added += 1
+
+        # Periodic progress logging (useful on hosted platforms like Render)
+        try:
+            if idx % progress_step == 0 or idx == total_varer:
+                print(
+                    f"[import-duty] {idx}/{total_varer} HTCs processed, added {added} rates so far.",
+                    flush=True,
+                )
+        except Exception:
+            pass
 
     if added:
         db.commit()
