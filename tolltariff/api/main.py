@@ -8,6 +8,7 @@ from .. import models, schemas
 from ..data.landgroups import get_landgroup_name, get_landgroup_countries, LANDGROUPS
 import json
 from pathlib import Path
+from ..config import settings
 
 app = FastAPI(title="Advanced Tolltariff API")
 
@@ -28,6 +29,22 @@ def root():
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+@app.get("/debug/info")
+def debug_info(db: Session = Depends(get_db)):
+    try:
+        htc_count = db.query(models.HTC).count()
+        rate_count = db.query(models.Rate).count()
+    except Exception:
+        htc_count = None
+        rate_count = None
+    return {
+        "database_url": settings.database_url,
+        "htc_count": htc_count,
+        "rate_count": rate_count,
+        "data_dir_exists": Path("data").exists(),
+        "frontend_dir_exists": Path("frontend").exists(),
+    }
 
 @app.get("/htc", response_model=list[schemas.HTCSummary])
 def list_htc(q: str | None = None, limit: int = 20, db: Session = Depends(get_db)):
