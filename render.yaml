@@ -2,8 +2,9 @@ services:
   - type: web
     name: advanced-tolltariff
     env: docker
+    plan: free
     autoDeploy: true
-    plan: starter
+    dockerfilePath: ./Dockerfile
     healthCheckPath: /health
     envVars:
       - key: PORT
@@ -15,7 +16,7 @@ services:
       # Optional: direct URL to duty rates JSON to import on startup
       - key: TOLLTARIFF_DUTY_URL
         value: ""
-    disks:
-      - name: data
-        mountPath: /app/data
-        sizeGB: 1
+    disk:
+      name: data
+      mountPath: /app/data
+      sizeGB: 1
