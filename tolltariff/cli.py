@@ -94,8 +94,9 @@ def import_structure(file: str | None = typer.Option(None, "--file", help="Calea
         if file:
             path = Path(file)
         else:
-            # use downloaded default
-            path = fetch_structure_json()
+            # Prefer local raw file if present to avoid network on hosted envs
+            local = RAW_DIR / "customstariffstructure.json"
+            path = local if local.exists() else fetch_structure_json()
         if not path.exists():
             raise typer.Exit(code=1)
 
@@ -221,7 +222,9 @@ def import_default_rates(file: str | None = typer.Option(None, "--file", help="C
         if file:
             path = Path(file)
         else:
-            path = fetch_import_fees_json()
+            # Prefer local raw file if present
+            local = RAW_DIR / "innfoerselsavgift.json"
+            path = local if local.exists() else fetch_import_fees_json()
         if not path.exists():
             raise typer.Exit(code=1)
         added = import_default_rates_from_fees(db, path, source_url=str(path))
