@@ -1,0 +1,21 @@
+[build]
+  publish = "frontend"
+  # No build command needed for static frontend
+
+[[redirects]]
+  # Map FastAPI's "/ui" static mount to Netlify root
+  from = "/ui/*"
+  to = "/:splat"
+  status = 200
+
+[[redirects]]
+  # SPA fallback to index.html
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# [[redirects]]
+#   # Backend API proxy — replace with your backend URL and uncomment
+#   from = "/htc/*"
+#   to = "https://your-backend.example.com/htc/:splat"
+#   status = 200

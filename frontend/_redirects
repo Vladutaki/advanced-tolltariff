@@ -1,0 +1,8 @@
+# Map FastAPI static mount (/ui) to Netlify root
+/ui/*  /:splat  200
+
+# SPA fallback to index.html
+/*     /index.html  200
+
+# Backend API proxy — replace with your backend URL
+# /htc/*  https://your-backend.example.com/htc/:splat  200

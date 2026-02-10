@@ -68,3 +68,42 @@ Aplicarea și testarea se fac local. Secțiunile legate de deploy/hosting au fos
 <!-- Power BI section removed -->
 
 <!-- CI/CD and Railway sections removed -->
+
+## Deploy pe Netlify
+
+Acest proiect are frontend static în `frontend/` și API FastAPI (Python). Pentru Netlify vom publica doar frontend-ul, iar apelurile către API (`/htc/...`) se vor redirecționa către un backend găzduit separat.
+
+Ce am adăugat:
+- `netlify.toml` la rădăcina repo-ului: setează `publish = "frontend"`, maparea căii `/ui/*` către rădăcina site-ului și fallback SPA către `index.html`.
+- `frontend/_redirects`: reguli Netlify pentru:
+  - `/ui/*  ->  /:splat` (resursele referențiate ca `/ui/...` vor funcționa)
+  - `/*     ->  /index.html` (fallback pentru aplicația single-page)
+  - Șablon pentru proxy API: linie comentată pe care o poți edita cu URL-ul backend-ului tău.
+
+Pași de deploy (UI):
+1) Găzduiește API-ul (FastAPI) în altă parte (ex.: Render, Fly.io, Railway, VM). API-ul trebuie să expună rutele la `/htc/...`.
+2) Editează fișierul [frontend/_redirects](frontend/_redirects) și înlocuiește exemplul pentru proxy:
+   - Decomentează linia și setează URL-ul backend-ului tău:
+   
+   ```
+   # /htc/*  https://your-backend.example.com/htc/:splat  200
+   ->
+   /htc/*  https://api.example.com/htc/:splat  200
+   ```
+
+3) Fă push pe GitHub (sau conectează direct repo-ul).
+4) În Netlify: "Add new site" → "Import from Git" → selectează repo-ul → la "Publish directory" pune `frontend` (fără build command).
+5) Deploy. Verifică că UI-ul se încarcă și că acțiunile care folosesc API funcționează.
+
+Alternativ (CLI):
+
+```bash
+npm install -g netlify-cli
+netlify init                 # creează site-ul și legătura cu repo
+netlify deploy --prod --dir frontend
+```
+
+Note:
+- Nu mutăm codul frontend; folosim redirectul `/ui/* -> /:splat` ca să păstrăm compatibilitatea cu referințele existente din UI.
+- Netlify nu expandează variabile de mediu în `_redirects`; setează direct URL-ul backend.
+- Dacă nu ai backend, UI-ul va afișa erori la apelurile către `/htc/...`. Configurează proxy-ul sau schimbă `fetch`-urile din `frontend/app.js` să folosească un `API_BASE_URL` dacă preferi asta.
